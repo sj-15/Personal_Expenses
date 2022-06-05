@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'personal expenses',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromARGB(255, 139, 19, 213),
+        scaffoldBackgroundColor: Color.fromARGB(255, 159, 6, 255),
       ),
       home: MyHomePage(),
     );
@@ -46,15 +46,21 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTrans(String txtitle, double amount) {
+  void _addNewTrans(String txtitle, double amount, DateTime selectedDT) {
     final newTx = trans(
       id: DateTime.now().toString(),
       title: txtitle,
       price: amount,
-      dt: DateTime.now(),
+      dt: selectedDT,
     );
     setState(() {
       _transactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
     });
   }
 
@@ -89,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recenttrans),
-            transactionsList(_transactions)
+            transactionsList(_transactions, _deleteTransaction)
           ],
         ),
       ),

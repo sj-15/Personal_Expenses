@@ -7,12 +7,13 @@ import 'package:intl/intl.dart';
 
 class transactionsList extends StatelessWidget {
   final List<trans> Transactions;
-  transactionsList(this.Transactions);
+  final Function deleteTX;
+  transactionsList(this.Transactions, this.deleteTX);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
+      height: 550,
       child: Transactions.isEmpty
           ? Column(
               children: <Widget>[
@@ -29,6 +30,7 @@ class transactionsList extends StatelessWidget {
                   color: Colors.black54,
                   elevation: 15,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.all(15),
@@ -64,9 +66,14 @@ class transactionsList extends StatelessWidget {
                             style: TextStyle(
                                 color: Color.fromARGB(255, 215, 225, 69),
                                 fontSize: 13),
-                          )
+                          ),
                         ],
-                      )
+                      ),
+                      IconButton(
+                        onPressed: () => deleteTX(Transactions[idx].id),
+                        icon: Icon(Icons.delete),
+                        color: Theme.of(context).errorColor,
+                      ),
                     ],
                   ),
                 );

@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NewTransactions extends StatefulWidget {
   // const NewTransactions({Key? key}) : super(key: key);
@@ -16,21 +17,39 @@ class NewTransactions extends StatefulWidget {
 
 class _NewTransactionsState extends State<NewTransactions> {
   final Function newtrans;
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
+  var _selecteDate;
+
   _NewTransactionsState(this.newtrans);
 
-  void submitdata() {
-    final enteredtitle = titleController.text;
-    if (enteredtitle.isEmpty || amountController.text.isEmpty) return;
-    final enteredamount = double.parse(amountController.text);
+  void _submitdata() {
+    final enteredtitle = _titleController.text;
+    if (enteredtitle.isEmpty || _amountController.text.isEmpty) return;
+    final enteredamount = double.parse(_amountController.text);
 
     if (enteredamount <= 0) return;
     widget.addtx(
       enteredtitle,
       enteredamount,
+      _selecteDate,
     );
     Navigator.of(context).pop();
+  }
+
+  void _datePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+    ).then((pickDate) {
+      if (pickDate == null) return;
+      setState(() {
+        _selecteDate = pickDate;
+      });
+    });
   }
 
   @override
@@ -60,9 +79,9 @@ class _NewTransactionsState extends State<NewTransactions> {
                 ),
               ),
               // onChanged: (val) => amountInput = val,
-              controller: amountController,
+              controller: _amountController,
               keyboardType: TextInputType.number,
-              onSubmitted: (_) => submitdata(),
+              onSubmitted: (_) => _submitdata(),
             ),
             SizedBox(
               height: 15,
@@ -83,15 +102,36 @@ class _NewTransactionsState extends State<NewTransactions> {
                 ),
               ),
               // onChanged: (val) => remarkInput = val,
-              controller: titleController,
-              onSubmitted: (_) => submitdata(),
+              controller: _titleController,
+              onSubmitted: (_) => _submitdata(),
             ),
             SizedBox(
               height: 5,
             ),
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _selecteDate == null
+                          ? DateFormat.yMd().format(DateTime.now())
+                          : DateFormat.yMd().format(_selecteDate),
+                    ),
+                  ),
+                  FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      child: Text(
+                        'Choose Date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: _datePicker),
+                ],
+              ),
+            ),
             FloatingActionButton(
               elevation: 10,
-              onPressed: submitdata,
+              onPressed: _submitdata,
               child: Icon(Icons.check),
             ),
           ],
