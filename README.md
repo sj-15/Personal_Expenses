@@ -1,4 +1,4 @@
-# personal_kharcha
+# personal_expenses
 
 A new Flutter project.
 
