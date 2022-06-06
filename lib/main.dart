@@ -79,23 +79,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigoAccent,
-        title: Text(
-          'Personal Expenses',
-          style: GoogleFonts.acme(
-            textStyle: TextStyle(color: Colors.black),
-          ),
+    final appBar = AppBar(
+      backgroundColor: Colors.indigoAccent,
+      title: Text(
+        'Personal Expenses',
+        style: GoogleFonts.acme(
+          textStyle: TextStyle(color: Colors.black),
         ),
       ),
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recenttrans),
-            transactionsList(_transactions, _deleteTransaction)
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.21,
+              child: Chart(_recenttrans),
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.79,
+              child: transactionsList(_transactions, _deleteTransaction),
+            ),
           ],
         ),
       ),
